@@ -31,9 +31,8 @@ $formulario.addEventListener("submit", (event) => {
   if (depto) objFinal.depto = depto;
 
   cargarURL(objFinal);
-   $flechas.style.display = "block"; // MOstrar flechas de paginación
+  $flechas.style.display = "block"; // MOstrar flechas de paginación
 });
-
 
 function cargarURL({ palabra = "", ubi, depto }) {
   const params = new URLSearchParams();
@@ -48,6 +47,19 @@ function obtenerObras(urlFinal) {
   fetch(urlFinal)
     .then((res) => res.json())
     .then((data) => {
+      console.log(data.total);
+      const mensajePrevio = document.querySelector("h2.noHayObras");
+      if (mensajePrevio) {
+        mensajePrevio.remove();
+      }
+      if (data.total === 0) {
+        const noHayObras = document.createElement("h2");
+        noHayObras.setAttribute("class", "noHayObras");
+        noHayObras.textContent = "No hay obras que mostrar";
+        document.body.appendChild(noHayObras);
+        $flechas.style.display = "none";
+        return;
+      }
       totalIds = data.objectIDs || [];
       currentPage = 1;
       mostrarPagina();
@@ -132,7 +144,7 @@ function crearCard(obj) {
   img.setAttribute("class", "foto");
   img.setAttribute("src", obj.primaryImage || "./no.imagen.png");
 
-  anio.textContent ="Fecha: "+ obj.objectDate || "Sin año.";
+  anio.textContent = "Fecha: " + obj.objectDate || "Sin año.";
   anio.style.display = "none";
 
   // Añadir los elementos a la tarjeta
