@@ -3,7 +3,7 @@ const app = express();
 const traducir = require("node-google-translate-skidz");
 const bodyParser = require("body-parser");
 var path = require('path');
-
+const port = process.env.PORT || 4000;
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -84,6 +84,6 @@ app.use((req, res, next) => {
   res.status(404).send("No se encontro su pagina :( ");
 });
 
-app.listen(3000, () => {
-  console.log("server runing on port 3000");
-});
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
